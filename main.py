@@ -1,6 +1,6 @@
 import pandas as pd
 from lib.chat import MyBotWrapper
-from lib.parser import SentGenParser, DerivativeParser, RationalParser
+from lib.parser import SentGenParser, DerivativeParser, RationalParser, PosTagParser
 from lib.utils import get_date_str, setup_log, setup_randomness
 from lib.io import read_data, write_data
 from lib.word_cluster import WordCluster
@@ -17,13 +17,14 @@ def main():
     fn_data = f'./data/output/{now}-AWL-sublist-{sublist}-cloze.xlsx'
     fn_log = f'./log/excel/{now}-log.xlsx'
     fn_inflections = f'./log/excel/{now}-inflections.xlsx'
-    inflection_columns = ['word', 'tag', 'lemm', 'unimorph']
+    inflection_columns = ['word', 'tag', 'lemm', 'unimorph', 'chatgpt']
 
     logger.info(f"Loading data from {path}...")
     word_cluster = load_sublist(path, sublist=sublist)
     df_inflections = pd.DataFrame(word_cluster.inflection_log, columns=inflection_columns)
     write_data(df_inflections, fn_inflections)
     logger.info(f"Inflections saved to {fn_inflections}")
+    return
     
     words = select_keywords(word_cluster, start=KEYWORD_START_POS, max_count=KEYWORD_COUNT)
     n_total = len(words)
@@ -110,6 +111,7 @@ def load_sublist(path, sublist=1, max_count=-1):
     wc = WordCluster()
     for i, row in df.iterrows():
         headword = row['Headword']
+        logger.info(f"Processing word family for '{headword}'...")
         # related_words = row['Related word forms'].split(',')
         # Do not derive for now
         related_words = []

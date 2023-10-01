@@ -1,6 +1,8 @@
 from collections import defaultdict
 from lemminflect import getAllInflections
 from unimorph import inflect_word
+from lib.chat import MyBotWrapper
+from lib.parser import PosTagParser
 
 import logging
 logger = logging.getLogger(__name__)
@@ -46,17 +48,20 @@ def get_inflections(word):
     """
     tag_to_words_lemm = get_inflections_lemm(word)
     tag_to_words_unimorph = get_inflections_unimorph(word)
+    tag_to_words_chatgpt = get_inflections_chatgpt(word)
+    
     # create a dict that logs the differences
-    total_keys = set(tag_to_words_lemm.keys()) | set(tag_to_words_unimorph.keys())
+    total_keys = set(tag_to_words_lemm.keys()) | set(tag_to_words_unimorph.keys() | set(tag_to_words_chatgpt.keys()))
     full = []
     for tag in total_keys:
-        total_values = tag_to_words_lemm.get(tag, set()) | tag_to_words_unimorph.get(tag, set())
+        total_values = tag_to_words_lemm.get(tag, set()) | tag_to_words_unimorph.get(tag, set()) | tag_to_words_chatgpt.get(tag, set())
         for w in total_values:
             full.append({
                          "word": w,
                          "tag": tag,
                          "lemm": w in tag_to_words_lemm.get(tag, set()),
                          "unimorph": w in tag_to_words_unimorph.get(tag, set()),
+                         "chatgpt": w in tag_to_words_chatgpt.get(tag, set()),
                          })
     res = {}
     for key, value in tag_to_words_lemm.items():
@@ -87,4 +92,12 @@ def get_inflections_unimorph(word):
             surface = orig
         tag_to_words[tag].add(surface)
     return dict(tag_to_words)
+
+
+def get_inflections_chatgpt(word):
+    bot_sent_gen = MyBotWrapper(parser=PosTagParser(), temperature=0)
+    r = bot_sent_gen.run(inputs={"word": word})
+    suc = r.get('success')
+    tag_to_words = r.get('result', {})
+    return tag_to_words
 

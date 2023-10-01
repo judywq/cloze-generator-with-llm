@@ -127,6 +127,64 @@ class SemanticParser(ParserBase):
         }
 
 
+
+class PosTagParser(ParserBase):
+    """Ask ChatGPT to generate the PoS tags
+    
+    inputs={"word": "account"}
+    
+    return {
+        "success": True,
+        "result":
+            {
+                "NN": {"account"},
+                "NNS": {"accounts"},
+            },
+        }
+    """
+    task_name = "POS Generation"
+    
+    def compose_prompt(self, inputs):
+        super().compose_prompt(inputs=inputs)
+        word = inputs.get('word')
+        prompt = f'''List up all the Penn Treebank Pos tag of the word "{word}". 
+Please give me the JSON object only.
+---
+Answer in the following JSON structure:
+{{
+  "TAG1": ["word1"],
+  "TAG2": ["word2", "word3"]
+}}
+'''
+        return prompt
+
+    def parse_response(self, prompt, response):
+        res = super().parse_response(prompt=prompt, response=response)
+        try:
+            obj = json.loads(response)
+            # convert list to set
+            res = {k: set(v) for k, v in obj.items()}
+            return {
+                **res,
+                "result": res,
+            }
+        except json.decoder.JSONDecodeError as e:
+            return {
+                **res,
+                "success": False,
+            }
+    
+    def get_sample_response(self, prompt):
+        return {
+            "success": True, 
+            "result": 
+            {
+                "NN": {"account"},
+                "NNS": {"accounts"},
+            },
+        }
+
+
 class SentGenParser(ParserBase):
     """Parse the generated sentence from ChatGPT
     

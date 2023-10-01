@@ -21,9 +21,11 @@ from lib.utils import load_config, setup_log
 from lib.chat import MyBotWrapper
 from lib.parser import *
 
-config = load_config()
+# config = load_config()
 
-openai.api_key = config['api_key']
+# openai.api_key = config['api_key']
+# Set the OPENAI_API_KEY environment variable to your key
+
 model = 'gpt-3.5-turbo-0301'
 model = 'gpt-3.5-turbo'
 
