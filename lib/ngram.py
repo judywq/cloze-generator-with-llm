@@ -35,6 +35,8 @@ def filter_high_freq_pos(headword, pos_list, th=0.1):
             item_list.append(search_item)
     content = ",".join(item_list)
     last_values = search_ngram(content)
+    if not last_values:
+        return res
     top_record = max(last_values, key=lambda x: x["last_value"])
     top_value = top_record["last_value"]
     th_value = top_value * th
