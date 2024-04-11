@@ -13,12 +13,12 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    sublist = setting.SUBLIST
     now = get_date_str()
     # input_name = 'CS2WordList'
-    input_name = 'AWL_sublist1'
+    input_name = f'AWL_sublist{sublist}'
     # input_name = 'AWL_sublist1_selected'
     path = f'data/input/{input_name}.xlsx'
-    sublist = setting.SUBLIST
     fn_data = f'./data/output/{now}-{input_name}-cloze.xlsx'
     fn_log = f'./log/excel/{now}-log.xlsx'
     fn_failure = f'./log/excel/{now}-log-failure.xlsx'
@@ -204,6 +204,7 @@ def load_sublist(path, sublist=1):
     """Load a sublist from a file as a DataFrame
     """
     df = read_data(path=path)
+    df['Sublist'] = df['Sublist'].astype('int')
     df = df[df['Sublist'] == sublist]
     df = df.astype({ 'Headword': 'str' })
     # df = df.astype({'Related word forms': 'str'})

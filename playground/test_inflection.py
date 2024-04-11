@@ -65,6 +65,12 @@ def test_single_word():
     # w = 'reinterpretation'
     w = 'police'
     w = 'fish'
+    w = 'measure'
+    w = 'disaster'
+    w = 'dog'
+    w = 'human'
+    w = 'eriee'
+    # w = 'robot'
     tag_to_words, log = get_inflections(w)
     print(",".join(tag_to_words.keys()))
     df = pd.DataFrame(log)
@@ -157,8 +163,8 @@ def test_reliability():
 if __name__ == '__main__':
     # test1()
     # test_libs()
-    # test_single_word()
-    test_filter_inflections_by_pos()
+    test_single_word()
+    # test_filter_inflections_by_pos()
     # test_filter_inflections_by_noun_pos()
     # test_several_words()
     # test_tags_awl()

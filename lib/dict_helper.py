@@ -20,7 +20,10 @@ fl_to_pos = {
     'interjection': 'UH',
 }
 
-def fetch_words_from_dict(keywords: list[str], api_key: str = None):
+def fetch_words_from_dict(keywords: list[str], api_key: str):
+    
+    if not api_key:
+        raise ValueError('Dict API key is not provided!')
     result_dict = {}
     if not keywords:
         return result_dict

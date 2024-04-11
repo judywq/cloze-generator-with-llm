@@ -20,6 +20,7 @@ SUBLIST = 1
 # Number of words to generate for each word family
 WORD_PER_FAMILY = 1
 WORD_PER_FAMILY = None
+
 DOMAIN = 'General Academic'
 LEVEL_START = 'A2'
 LEVEL_END = 'lower B2'
@@ -29,11 +30,11 @@ RETRY_COUNT_FOR_SINGLE_WORD = 5
 
 # The start position of keyword selection (count from 1, inclusive)
 KEYWORD_START_POS = 1
-# KEYWORD_START_POS = 20
+# KEYWORD_START_POS = 11
 
 # The number of keywords for generating sentences, -1 means all
 KEYWORD_COUNT = -1
-# KEYWORD_COUNT = 5
+# KEYWORD_COUNT = 10
 
 NEED_DISTRACTOR = True
 # NEED_DISTRACTOR = False
@@ -47,4 +48,4 @@ RANDOM_SEED = 42
 
 
 # Merriam-Webster API key
-DICT_API_KEY = os.environ.get('MERRIAM_WEBSTER_API_KEY', 'NOT_SET')
+DICT_API_KEY = os.environ.get('MERRIAM_WEBSTER_API_KEY', None)

@@ -33,9 +33,29 @@ $ $ SYM $ quantmod $ False False
 billion billion NUM CD pobj xxxx True False    
 """    
 
+
+def test_sentences():
+    sentences = [
+        "Dog and human are close friends.",
+        "We can take measure for disaster.",
+        ]
+    for s in sentences:
+        print_tag_of_sent(s)
+        print('-'*20)
+
+def print_tag_of_sent(sentence):
+    # https://spacy.io/usage/linguistic-features
+    doc = nlp(sentence)
+
+    for token in doc:
+        print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+                token.shape_, token.is_alpha, token.is_stop)
+
+
 def test_sentence():
     # https://spacy.io/usage/linguistic-features
     doc = nlp("He saw a broken table.")
+    doc = nlp("As winter holidays approach, many students plan trips to experience different cultures and relax")
 
     for token in doc:
         print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
@@ -71,7 +91,8 @@ if __name__ == '__main__':
     # print_all_tags()
     # test1()
     # print_spacy_tags()
-    test_sentence()
+    # test_sentence()
+    test_sentences()
 
 
 
